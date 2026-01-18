@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapatos Shoes Lulu - Catálogo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>👟 Shoes Lulu</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#catalogo">Catálogo</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon">
+                <span class="cart-count">0</span>
+                🛒
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Encuentra tu estilo perfecto</h2>
+            <p>Descubre nuestra colección de zapatos de alta calidad</p>
+            <a href="#catalogo" class="btn-primary">Ver Catálogo</a>
+        </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="filters" id="catalogo">
+        <div class="container">
+            <h2>Nuestro Catálogo</h2>
+            <div class="filter-bar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar zapatos...">
+                    <button id="searchBtn">🔍</button>
+                </div>
+                <div class="filter-options">
+                    <select id="sortFilter">
+                        <option value="">Ordenar por</option>
+                        <option value="price-asc">Precio: Menor a Mayor</option>
+                        <option value="price-desc">Precio: Mayor a Menor</option>
+                        <option value="name">Nombre A-Z</option>
+                    </select>
+                    <select id="stockFilter">
+                        <option value="">Todos</option>
+                        <option value="available">Solo disponibles</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo de productos -->
+    <section class="catalog">
+        <div class="container">
+            <div id="loadingSpinner" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando productos...</p>
+            </div>
+            <div id="errorMessage" class="error-message" style="display: none;">
+                <p>⚠️ Error al cargar los productos. Por favor, intenta nuevamente.</p>
+            </div>
+            <div id="productsGrid" class="products-grid">
+                <!-- Los productos se cargarán dinámicamente aquí -->
+            </div>
+            <div id="noProducts" class="no-products" style="display: none;">
+                <p>No se encontraron productos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de producto -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-images">
+                    <div class="main-image">
+                        <img id="modalMainImage" src="" alt="">
+                    </div>
+                    <div id="modalThumbnails" class="thumbnails">
+                        <!-- Miniaturas se cargarán aquí -->
+                    </div>
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <p class="modal-price" id="modalPrice"></p>
+                    <div class="modal-description">
+                        <h3>Descripción</h3>
+                        <p id="modalDescription"></p>
+                    </div>
+                    <div class="modal-stock">
+                        <p id="modalStock"></p>
+                    </div>
+                    <div class="modal-sizes" id="modalSizes">
+                        <h3>Tallas disponibles</h3>
+                        <div class="sizes-container"></div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-primary btn-add-cart">
+                            <span>🛒</span> Agregar al carrito
+                        </button>
+                        <button class="btn-secondary btn-whatsapp" id="btnWhatsapp">
+                            <span>📱</span> Consultar por WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>👟 Shoes Lulu</h3>
+                    <p>Tu tienda de confianza para encontrar los mejores zapatos.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>📧 Email: info@shoeslulu.com</p>
+                    <p>📱 Teléfono: +123 456 7890</p>
+                    <p>📍 Dirección: Calle Principal #123</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link">Facebook</a>
+                        <a href="#" class="social-link">Instagram</a>
+                        <a href="#" class="social-link">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Shoes Lulu. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
