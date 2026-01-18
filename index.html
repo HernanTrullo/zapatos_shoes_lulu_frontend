@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Descubre nuestra colección de zapatos de alta calidad - Shoes Lulu">
     <title>Zapatos Shoes Lulu - Catálogo</title>
-    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -83,6 +88,39 @@
         </div>
     </section>
 
+    <!-- Modal del Carrito -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content cart-modal-content">
+            <span class="close cart-close">&times;</span>
+            <div class="cart-header">
+                <h2>🛒 Mi Carrito</h2>
+            </div>
+            <div class="cart-body">
+                <div id="cartItems" class="cart-items">
+                    <!-- Los productos del carrito se mostrarán aquí -->
+                </div>
+                <div id="emptyCart" class="empty-cart" style="display: none;">
+                    <p>😕 Tu carrito está vacío</p>
+                    <p>Agrega productos desde el catálogo</p>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <h3>Total:</h3>
+                    <h3 id="cartTotalPrice">$0.00</h3>
+                </div>
+                <div class="cart-actions">
+                    <button class="btn-primary btn-whatsapp-cart" id="btnWhatsappCart">
+                        <span>📱</span> Consultar por WhatsApp
+                    </button>
+                    <button class="btn-secondary btn-payment-disabled" disabled title="Próximamente disponible">
+                        <span>💳</span> Pasarela de Pago (Próximamente)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de producto -->
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -156,12 +194,14 @@
     <a href="https://wa.me/573232312340?text=Hola!%20Quiero%20más%20información%20sobre%20sus%20productos" 
        class="whatsapp-float" 
        target="_blank"
-       title="Contáctanos por WhatsApp">
+       title="Contáctanos por WhatsApp"
+       rel="noopener noreferrer">
         <svg viewBox="0 0 32 32" width="32" height="32">
             <path fill="white" d="M16 0C7.164 0 0 7.164 0 16c0 2.828.736 5.484 2.132 7.836L.052 31.168l7.548-1.98A15.93 15.93 0 0016 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm9.272 22.536c-.388 1.096-1.928 2.004-3.152 2.268-.84.18-1.936.324-5.628-1.208-4.732-1.964-7.78-6.7-8.012-7.012-.228-.312-1.868-2.488-1.868-4.748 0-2.26 1.188-3.372 1.608-3.832.42-.46.916-.576 1.224-.576.308 0 .616.004.888.016.284.012.664-.108.96.732.308.876 1.048 2.556 1.14 2.74.092.184.152.4.032.644-.12.244-.18.396-.356.608-.176.212-.372.472-.532.632-.176.176-.36.368-.156.72.204.352.908 1.496 1.948 2.424 1.34 1.196 2.468 1.568 2.816 1.744.348.176.552.148.756-.088.204-.236.876-1.02 1.108-1.372.232-.352.464-.292.78-.176.316.116 2.008.948 2.352 1.12.344.172.572.26.656.404.084.144.084.828-.304 1.924z"/>
         </svg>
     </a>
 
-    <script src="script.js"></script>
+    <!-- App principal con módulos ES6 -->
+    <script type="module" src="src/app.js"></script>
 </body>
 </html>

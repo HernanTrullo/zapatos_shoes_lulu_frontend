@@ -246,7 +246,7 @@ function updateModalSizes(tallasData) {
 
 // Inicializar event listeners
 function initializeEventListeners() {
-    // Cerrar modal
+    // Cerrar modal de producto
     const modal = document.getElementById('productModal');
     const closeBtn = modal.querySelector('.close');
     
@@ -258,6 +258,22 @@ function initializeEventListeners() {
         if (event.target === modal) {
             modal.style.display = 'none';
         }
+        if (event.target === cartModal) {
+            cartModal.style.display = 'none';
+        }
+    };
+
+    // Carrito - abrir modal
+    const cartIcon = document.querySelector('.cart-icon');
+    const cartModal = document.getElementById('cartModal');
+    const cartCloseBtn = cartModal.querySelector('.cart-close');
+
+    cartIcon.addEventListener('click', () => {
+        openCartModal();
+    });
+
+    cartCloseBtn.onclick = () => {
+        cartModal.style.display = 'none';
     };
 
     // Búsqueda
@@ -348,8 +364,10 @@ function addToCart(product) {
     
     const cartItem = {
         id: product.id,
+        documentId: product.documentId,
         nombre: attributes.nombre,
         precio: attributes.precio,
+        imagen: attributes.imagen && attributes.imagen[0] ? attributes.imagen[0].url : null,
         cantidad: 1
     };
 
@@ -366,6 +384,112 @@ function addToCart(product) {
     
     // Mostrar mensaje de confirmación
     showNotification('Producto agregado al carrito ✓');
+}
+
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartCount();
+    saveCartToStorage();
+    updateCartDisplay();
+    showNotification('Producto eliminado del carrito');
+}
+
+function updateCartQuantity(productId, change) {
+    const item = cart.find(item => item.id === productId);
+    if (item) {
+        item.cantidad += change;
+        if (item.cantidad <= 0) {
+            removeFromCart(productId);
+        } else {
+            updateCartCount();
+            saveCartToStorage();
+            updateCartDisplay();
+        }
+    }
+}
+
+function openCartModal() {
+    const cartModal = document.getElementById('cartModal');
+    updateCartDisplay();
+    cartModal.style.display = 'block';
+}
+
+function updateCartDisplay() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const emptyCart = document.getElementById('emptyCart');
+    const cartTotalPrice = document.getElementById('cartTotalPrice');
+
+    if (cart.length === 0) {
+        cartItemsContainer.style.display = 'none';
+        emptyCart.style.display = 'block';
+        cartTotalPrice.textContent = '$0.00';
+        return;
+    }
+
+    cartItemsContainer.style.display = 'block';
+    emptyCart.style.display = 'none';
+
+    // Calcular total
+    const total = cart.reduce((sum, item) => {
+        const precio = parseFloat(item.precio) || 0;
+        return sum + (precio * item.cantidad);
+    }, 0);
+
+    cartTotalPrice.textContent = `$${formatPrice(total)}`;
+
+    // Renderizar items
+    cartItemsContainer.innerHTML = cart.map(item => {
+        const imagenUrl = item.imagen 
+            ? (item.imagen.startsWith('http') ? item.imagen : `${UPLOADS_URL}${item.imagen}`)
+            : 'https://via.placeholder.com/80x80?text=Sin+Imagen';
+
+        return `
+            <div class="cart-item">
+                <img src="${imagenUrl}" alt="${item.nombre}" class="cart-item-image" onerror="this.src='https://via.placeholder.com/80x80?text=Sin+Imagen'">
+                <div class="cart-item-info">
+                    <h4>${item.nombre}</h4>
+                    <p class="cart-item-price">$${formatPrice(item.precio)}</p>
+                </div>
+                <div class="cart-item-quantity">
+                    <button class="qty-btn" onclick="updateCartQuantity(${item.id}, -1)">-</button>
+                    <span>${item.cantidad}</span>
+                    <button class="qty-btn" onclick="updateCartQuantity(${item.id}, 1)">+</button>
+                </div>
+                <div class="cart-item-total">
+                    <p>$${formatPrice(parseFloat(item.precio) * item.cantidad)}</p>
+                </div>
+                <button class="cart-item-remove" onclick="removeFromCart(${item.id})" title="Eliminar">🗑️</button>
+            </div>
+        `;
+    }).join('');
+
+    // Configurar botón de WhatsApp del carrito
+    const btnWhatsappCart = document.getElementById('btnWhatsappCart');
+    btnWhatsappCart.onclick = () => {
+        sendCartToWhatsApp();
+    };
+}
+
+function sendCartToWhatsApp() {
+    if (cart.length === 0) {
+        showNotification('El carrito está vacío');
+        return;
+    }
+
+    let mensaje = '¡Hola! Estoy interesado en los siguientes productos:\n\n';
+    
+    cart.forEach((item, index) => {
+        mensaje += `${index + 1}. ${item.nombre}\n`;
+        mensaje += `   Cantidad: ${item.cantidad}\n`;
+        mensaje += `   Precio unitario: $${formatPrice(item.precio)}\n`;
+        mensaje += `   Subtotal: $${formatPrice(parseFloat(item.precio) * item.cantidad)}\n\n`;
+    });
+
+    const total = cart.reduce((sum, item) => sum + (parseFloat(item.precio) * item.cantidad), 0);
+    mensaje += `*Total: $${formatPrice(total)}*`;
+
+    const url = `https://wa.me/573232312340?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
 }
 
 function updateCartCount() {
