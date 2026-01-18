@@ -22,12 +22,29 @@ async function loadProducts() {
     try {
         loadingSpinner.style.display = 'block';
         errorMessage.style.display = 'none';
+        
+        // Actualizar mensaje para indicar que el servidor puede estar despertando
+        const loadingText = loadingSpinner.querySelector('p');
+        if (loadingText) {
+            loadingText.textContent = 'Cargando productos... (Esto puede tomar hasta 50 segundos si el servidor estaba inactivo)';
+        }
+
+        // Timeout de 60 segundos para dar tiempo a que Render despierte
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 60000);
 
         // Obtener zapatos con sus relaciones (tallas e imágenes)
-        const response = await fetch(`${API_URL}/zapatoes?populate=*`);
+        const response = await fetch(`${API_URL}/zapatoes?populate=*`, {
+            signal: controller.signal,
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        clearTimeout(timeout);
         
         if (!response.ok) {
-            throw new Error('Error al cargar los productos');
+            throw new Error(`Error al cargar los productos: ${response.status}`);
         }
 
         const data = await response.json();
@@ -47,6 +64,16 @@ async function loadProducts() {
         console.error('Error:', error);
         loadingSpinner.style.display = 'none';
         errorMessage.style.display = 'block';
+        
+        // Mensaje más descriptivo
+        const errorText = errorMessage.querySelector('p');
+        if (errorText) {
+            if (error.name === 'AbortError') {
+                errorText.innerHTML = '⚠️ El servidor tardó demasiado en responder. Por favor, <a href="javascript:location.reload()">recarga la página</a>.';
+            } else {
+                errorText.innerHTML = `⚠️ Error al cargar los productos: ${error.message}. <a href="javascript:location.reload()">Intentar de nuevo</a>.`;
+            }
+        }
     }
 }
 
@@ -92,7 +119,10 @@ function createProductCard(product) {
             imagenUrl = primeraImagen.url.startsWith('http') 
                 ? primeraImagen.url 
                 : `${UPLOADS_URL}${primeraImagen.url}`;
+            console.log('URL de imagen construida:', imagenUrl); // Debug
         }
+    } else {
+        console.log('No se encontraron imágenes para:', nombre, 'Data:', attributes.imagen); // Debug
     }
 
     const stockStatus = stock > 0 && activo ? 'En Stock' : 'Agotado';
@@ -141,7 +171,7 @@ function openProductModal(product) {
     const btnWhatsapp = document.getElementById('btnWhatsapp');
     btnWhatsapp.onclick = () => {
         const mensaje = `Hola! Estoy interesado en el producto: ${attributes.nombre} - $${formatPrice(attributes.precio)}`;
-        const url = `https://wa.me/1234567890?text=${encodeURIComponent(mensaje)}`;
+        const url = `https://wa.me/573232312340?text=${encodeURIComponent(mensaje)}`;
         window.open(url, '_blank');
     };
 
