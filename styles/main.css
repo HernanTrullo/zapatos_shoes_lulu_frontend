@@ -815,18 +815,18 @@ body {
 
     /* Miniaturas optimizadas para móvil */
     .thumbnails {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
         gap: 0.5rem;
-        padding-bottom: 0.5rem;
-        max-height: none;
-        overflow-x: auto;
-        overflow-y: visible;
+        padding: 0.5rem 0;
+        max-height: 150px;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .thumbnail {
-        width: 60px;
+        width: 100%;
         height: 60px;
-        min-width: 60px;
         transform: none;
     }
 
@@ -943,17 +943,18 @@ body {
 
     /* Miniaturas en pantallas muy pequeñas */
     .thumbnails {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
         gap: 0.4rem;
-        overflow-x: auto;
-        max-height: none;
-        padding-bottom: 0.5rem;
+        max-height: 140px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 0.5rem 0;
     }
 
     .thumbnail {
-        width: 55px;
+        width: 100%;
         height: 55px;
-        min-width: 55px;
         border-radius: 6px;
         transform: none;
     }

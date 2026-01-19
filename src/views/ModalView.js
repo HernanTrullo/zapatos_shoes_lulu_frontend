@@ -18,6 +18,10 @@ export class ModalView {
         this.sizesContainer = this.modal.querySelector('.sizes-container');
         this.btnWhatsapp = document.getElementById('btnWhatsapp');
         this.btnAddCart = this.modal.querySelector('.btn-add-cart');
+        this.isModalOpen = false;
+        
+        // Manejar navegación con botón "Atrás"
+        this._setupHistoryHandler();
     }
 
     /**
@@ -41,6 +45,12 @@ export class ModalView {
         this.btnAddCart.onclick = () => callbacks.onAddToCart(product);
 
         this.modal.style.display = 'block';
+        this.isModalOpen = true;
+        
+        // Agregar estado al historial para manejar botón "Atrás"
+        if (window.history.state?.modal !== true) {
+            window.history.pushState({ modal: true }, '');
+        }
     }
 
     /**
@@ -48,6 +58,12 @@ export class ModalView {
      */
     hide() {
         this.modal.style.display = 'none';
+        this.isModalOpen = false;
+        
+        // Si el historial tiene el estado del modal, volver atrás
+        if (window.history.state?.modal === true) {
+            window.history.back();
+        }
     }
 
     /**
@@ -116,6 +132,19 @@ export class ModalView {
         window.addEventListener('click', (e) => {
             if (e.target === this.modal) {
                 this.hide();
+            }
+        });
+    }
+
+    /**
+     * Configura el manejador del historial del navegador
+     */
+    _setupHistoryHandler() {
+        window.addEventListener('popstate', (event) => {
+            // Si el modal está abierto y se presiona "Atrás", cerrar el modal
+            if (this.isModalOpen) {
+                this.modal.style.display = 'none';
+                this.isModalOpen = false;
             }
         });
     }
