@@ -18,12 +18,18 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
     background-color: #f8f9fa;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
@@ -397,7 +403,7 @@ body {
     padding: 0;
     border-radius: var(--border-radius);
     width: 90%;
-    max-width: 900px;
+    max-width: 1000px;
     animation: slideIn 0.3s ease;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
@@ -418,8 +424,8 @@ body {
 
 .modal-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.5rem;
     padding: 2rem;
 }
 
@@ -429,35 +435,62 @@ body {
     gap: 1rem;
 }
 
+.main-image {
+    position: relative;
+}
+
 .main-image img {
     width: 100%;
-    height: 400px;
+    height: 450px;
     object-fit: cover;
     border-radius: var(--border-radius);
     background: var(--light-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .thumbnails {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--light-color);
+}
+
+.thumbnails::-webkit-scrollbar {
+    height: 6px;
+}
+
+.thumbnails::-webkit-scrollbar-track {
+    background: var(--light-color);
+    border-radius: 10px;
+}
+
+.thumbnails::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
 }
 
 .thumbnail {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: 90px;
     object-fit: cover;
     border-radius: 8px;
     cursor: pointer;
     opacity: 0.6;
     transition: var(--transition);
-    border: 2px solid transparent;
+    border: 3px solid transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .thumbnail:hover,
 .thumbnail.active {
     opacity: 1;
     border-color: var(--primary-color);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
 .modal-info {
@@ -499,21 +532,24 @@ body {
 .sizes-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .size-badge {
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     background: var(--light-color);
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
+    border: 2px solid transparent;
 }
 
 .size-badge:hover {
     background: var(--secondary-color);
     color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(78, 205, 196, 0.3);
 }
 
 .modal-actions {
@@ -641,15 +677,58 @@ body {
     }
 }
 
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* ===== OPTIMIZACIÓN PARA PANTALLAS GRANDES ===== */
+@media (min-width: 1200px) {
+    .modal-content {
+        max-width: 1100px;
+    }
+
+    .modal-body {
+        gap: 3rem;
+        padding: 2.5rem;
+    }
+
+    .main-image img {
+        height: 500px;
+    }
+
+    .thumbnails {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 1rem;
+    }
+
+    .thumbnail {
+        height: 100px;
+    }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .header .container {
-        flex-direction: column;
+        flex-wrap: wrap;
         gap: 1rem;
+    }
+
+    .logo h1 {
+        font-size: 1.4rem;
     }
 
     .nav ul {
         gap: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .hero {
+        padding: 4rem 1.5rem;
     }
 
     .hero-content h2 {
@@ -683,27 +762,194 @@ body {
         gap: 1.5rem;
     }
 
+    /* Modal responsive mejorado */
+    .modal {
+        padding: 1rem;
+    }
+
     .modal-content {
-        width: 95%;
-        margin: 5% auto;
+        width: 100%;
+        margin: 0;
+        max-height: 100vh;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        animation: slideUp 0.3s ease;
     }
 
     .modal-body {
         grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1.5rem;
     }
 
     .main-image img {
         height: 300px;
     }
+
+    /* Miniaturas optimizadas para móvil */
+    .thumbnails {
+        display: flex;
+        gap: 0.5rem;
+        padding-bottom: 0.75rem;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+
+    .thumbnail {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        transform: none;
+    }
+
+    .thumbnail:hover {
+        transform: none;
+    }
+
+    .thumbnail.active {
+        transform: none;
+    }
+
+    #modalTitle {
+        font-size: 1.5rem;
+    }
+
+    .modal-price {
+        font-size: 2rem;
+    }
+
+    .modal-actions {
+        gap: 0.75rem;
+    }
+
+    .btn-add-cart,
+    .btn-whatsapp {
+        padding: 0.875rem;
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .header .container {
+        justify-content: space-between;
+    }
+
+    .logo h1 {
+        font-size: 1.2rem;
+    }
+
+    .nav ul {
+        gap: 0.75rem;
+        font-size: 0.85rem;
+    }
+
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
     }
 
     .hero {
-        padding: 4rem 1rem;
+        padding: 3rem 1rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+
+    /* Modal en pantallas muy pequeñas */
+    .modal-content {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        max-height: 95vh;
+    }
+
+    .modal-body {
+        padding: 1rem 0.75rem;
+        gap: 1.25rem;
+    }
+
+    .main-image img {
+        height: 250px;
+        border-radius: 8px;
+    }
+
+    /* Miniaturas en pantallas muy pequeñas */
+    .thumbnails {
+        display: flex;
+        gap: 0.4rem;
+        overflow-x: auto;
+        max-height: none;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        border-radius: 6px;
+        transform: none;
+    }
+
+    .thumbnail:hover,
+    .thumbnail.active {
+        transform: none;
+    }
+
+    #modalTitle {
+        font-size: 1.25rem;
+    }
+
+    .modal-price {
+        font-size: 1.75rem;
+    }
+
+    .modal-description h3,
+    .modal-sizes h3 {
+        font-size: 1rem;
+    }
+
+    .modal-description p {
+        font-size: 0.9rem;
+    }
+
+    .sizes-container {
+        gap: 0.4rem;
+    }
+
+    .size-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .modal-actions {
+        gap: 0.6rem;
+    }
+
+    .btn-add-cart,
+    .btn-whatsapp {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .close {
+        font-size: 1.75rem;
+        padding: 0.75rem;
     }
 }
 
@@ -955,14 +1201,41 @@ body {
 }
 
 @media (max-width: 768px) {
+    .cart-modal-content {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        max-height: 100vh;
+    }
+
+    .cart-header {
+        padding: 1.25rem;
+    }
+
+    .cart-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .cart-body {
+        padding: 1rem;
+    }
+
     .cart-item {
         grid-template-columns: 60px 1fr;
         gap: 0.75rem;
+        padding: 0.875rem;
+        position: relative;
     }
 
     .cart-item-image {
         width: 60px;
         height: 60px;
+    }
+
+    .cart-item-info h4 {
+        font-size: 0.95rem;
+        padding-right: 30px;
     }
 
     .cart-item-quantity {
@@ -972,19 +1245,211 @@ body {
         border-top: 1px solid var(--light-color);
     }
 
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+    }
+
     .cart-item-total {
         grid-column: 1 / -1;
         text-align: center;
         padding-top: 0.5rem;
+        font-size: 1.1rem;
     }
 
     .cart-item-remove {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.75rem;
+        right: 0.75rem;
+        font-size: 1.4rem;
+    }
+
+    .cart-footer {
+        padding: 1rem;
+    }
+
+    .cart-total {
+        padding: 0.875rem;
+        font-size: 0.95rem;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
     .cart-actions button {
         min-width: 100%;
+        width: 100%;
+    }
+}
+
+/* ===== MEJORAS PARA PANTALLAS EXTRA PEQUEÑAS ===== */
+@media (max-width: 360px) {
+    .logo h1 {
+        font-size: 1.1rem;
+    }
+
+    .nav ul {
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .hero-content h2 {
+        font-size: 1.3rem;
+    }
+
+    .hero-content p {
+        font-size: 0.85rem;
+    }
+
+    .btn-primary {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .thumbnail {
+        width: 55px;
+        height: 55px;
+        min-width: 55px;
+    }
+
+    .product-card {
+        border-radius: 8px;
+    }
+
+    .product-image {
+        height: 200px;
+    }
+
+    #modalTitle {
+        font-size: 1.1rem;
+    }
+
+    .modal-price {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== MEJORAS PARA DISPOSITIVOS TÁCTILES ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* Aumentar áreas táctiles para botones */
+    .btn-primary,
+    .btn-secondary,
+    .btn-add-cart,
+    .btn-whatsapp {
+        min-height: 48px;
+        padding: 0.875rem 1.5rem;
+    }
+
+    .qty-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .thumbnail {
+        min-height: 60px;
+    }
+
+    .cart-icon {
+        padding: 0.5rem;
+        margin: -0.5rem;
+    }
+
+    .nav a {
+        padding: 0.5rem;
+        margin: -0.5rem;
+    }
+
+    .close {
+        padding: 1rem;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .size-badge {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Desactivar efectos hover en dispositivos táctiles */
+    .product-card:hover {
+        transform: none;
+    }
+
+    .thumbnail:hover {
+        opacity: 0.6;
+    }
+}
+
+/* ===== MODO LANDSCAPE EN MÓVILES ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        padding: 3rem 1.5rem;
+        min-height: 50vh;
+    }
+
+    .modal-content {
+        position: relative;
+        margin: 2rem auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-body {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .main-image img {
+        height: 250px;
+    }
+}
+
+/* ===== OPTIMIZACIONES PARA RENDIMIENTO MÓVIL ===== */
+@media (max-width: 768px) {
+    /* Reducir complejidad visual en móviles */
+    * {
+        -webkit-tap-highlight-color: rgba(255, 107, 107, 0.2);
+    }
+
+    /* Optimizar animaciones */
+    .product-card,
+    .btn-primary,
+    .btn-secondary {
+        will-change: transform;
+    }
+
+    /* Mejorar rendimiento del scroll */
+    .modal,
+    .cart-body,
+    .thumbnails {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== PREVENIR ZOOM ACCIDENTAL EN INPUTS EN iOS ===== */
+@media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="search"],
+    select,
+    textarea {
+        font-size: 16px !important;
     }
 }
