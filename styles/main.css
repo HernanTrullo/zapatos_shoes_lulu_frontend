@@ -379,6 +379,7 @@ body {
 }
 
 .product-stock {
+    display: none;
     font-size: 0.9rem;
     color: #7f8c8d;
 }
@@ -525,6 +526,7 @@ body {
 }
 
 .modal-stock {
+    display: none;
     padding: 0.5rem 1rem;
     background: var(--light-color);
     border-radius: 8px;
@@ -859,6 +861,7 @@ body {
     }
 
     .modal-stock {
+        display: none;
         padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
     }
@@ -982,6 +985,7 @@ body {
     }
 
     .modal-stock {
+        display: none;
         padding: 0.4rem 0.7rem;
         font-size: 0.85rem;
     }
